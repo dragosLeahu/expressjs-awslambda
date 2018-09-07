@@ -1,0 +1,28 @@
+{
+  "name": "expressjs-awslambda",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "local": "nodemon ./app.local.js",
+    "update": "claudia update",
+    "deploy": "claudia create --handler lambda.handler --deploy-proxy-api --version dev --region eu-central-1",
+    "release": "claudia set-version --version production",
+    "start": "ntl"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "claudia": "^5.1.1",
+    "morgan": "^1.9.0",
+    "nodemon": "^1.18.4",
+    "ntl": "^3.0.0"
+  },
+  "dependencies": {
+    "aws-serverless-express": "^3.3.5",
+    "express": "^4.16.3",
+    "mongoose": "^5.2.13",
+    "dotenv": "^6.0.0"
+  }
+}
