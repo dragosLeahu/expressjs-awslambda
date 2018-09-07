@@ -2,6 +2,7 @@
 
 ## Prerequisites
 - AWS account with access to IAM and Lambda (AWSLambdaFullAccess, IAMFullAccess, AmazonAPIGatewayAdministrator)
+- [AWS CLI configured with *default* user.](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html) [More info from ClaudiaJS documentation here.](https://claudiajs.com/tutorials/installing.html)
 - Node.js 6 or 8
 - NPM
 
