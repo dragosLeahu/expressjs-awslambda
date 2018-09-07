@@ -6,12 +6,14 @@
 - NPM
 
 ## Installation and setup
-1. Create a *variables.env* file where you will add the connection string for MongoDB [here's how you can get the connection string](https://hackernoon.com/building-a-serverless-rest-api-with-node-js-and-mongodb-2e0ed0638f47#0027).
+**1.** Create a *variables.env* file where you will add the connection string for MongoDB [here's how you can get the connection string](https://hackernoon.com/building-a-serverless-rest-api-with-node-js-and-mongodb-2e0ed0638f47#0027).
   - The connection string should look like this in the *variables.env*: **DB=mongodb://`USERNAME`:`PASSWORD`@express-awslambda-shard-00-00-9pqtu.mongodb.net:27017,express-awslambda-shard-00-01-9pqtu.mongodb.net:27017,express-awslambda-shard-00-02-9pqtu.mongodb.net:27017/test?ssl=true&replicaSet=express-awslambda-shard-0&authSource=admin&retryWrites=true**
 
-2. In the cmd navigate to the root of the project folder and run: `npm i --save-dev claudia morgan nodemon ntl` and `npm i -g aws-serverless-express express mongoose dotenv` 
+**2.** Run `npm install` to install all the required dependencies.
 
-3. In the *package.json* file at, *scripts -> deploy*, change *--region* to your selected region from the AWS Lambda.
+**3.** In the *package.json* file:
+- *scripts -> deploy*, change *--region* to your selected region from the AWS Lambda.
+- change *name* to your application name.
 
 ## Usage
 **Use `npm start` to open a menu with available run methods:**
