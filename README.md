@@ -25,4 +25,4 @@
 5. `start` -> used to be able to run `npm start` and show this menu in the cmd.
 
 ### Notes
-1. **The *.npmignore* file needs to be in the project even if it is empty**, because it overrides the *.gitignore* file and this is needed while deploying to AWS Lambda. By default ClaudiaJS ignores files from *.gitignore* when packaging the zip for deployment. This leads to the file *variables.env* not being deployed, because it is listed in the *.gitignore* file. If we have the *.npmignore* file in the root of the project, then at deployment it will override the *.gitignore* file and let the *variables.env* file to be deployed. 
+1. **The *.npmignore* file needs to remain inside the project even if it is an empty file, because it overrides the *.gitignore* file at deployment time**. By default ClaudiaJS ignores files from *.gitignore* when packaging the zip for deployment. This leads to the file *variables.env* not being deployed, because it is listed in the *.gitignore* file. If we have the *.npmignore* file in the root of the project, then at deployment it will override the *.gitignore* file and let the *variables.env* file to be deployed. 
