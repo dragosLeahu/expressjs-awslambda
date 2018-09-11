@@ -1,55 +1,51 @@
-const  express = require('express'),
-  router = express.Router(),
-  NoteService = require('../services/NoteService')
+const NoteService = require('../services/NoteService')
 
-router.post('/', function(req, res) {
+module.exports.create = (req, res) => {
   NoteService.createNote(req, function(err, data) {
-    if(err) {
+    if (err) {
       res.send(err)
     } else {
       res.send(data)
     }
   })
-})
+}
 
-router.get('/', function(req, res) {
+module.exports.getAll = (req, res) => {
   NoteService.getAllNotes(function(err, data) {
-    if(err) {
+    if (err) {
       res.send(err)
     } else {
       res.send(data)
     }
   })
-})
+}
 
-router.get('/:id', function(req, res) {
+module.exports.getOne = (req, res) => {
   NoteService.getNoteById(req, function(err, data) {
-    if(err) {
+    if (err) {
       res.send(err)
     } else {
       res.send(data)
     }
   })
-})
+}
 
-router.put('/:id', function(req, res) {
+module.exports.update = (req, res) => {
   NoteService.updateNoteById(req, function(err, data) {
-    if(err) {
+    if (err) {
       res.send(err)
     } else {
       res.send(data)
     }
   })
-})
+}
 
-router.delete('/:id', function(req, res) {
+module.exports.delete = (req, res) => {
   NoteService.deleteNoteById(req, function(err, data) {
-    if(err) {
+    if (err) {
       res.send(err)
     } else {
       res.send(data)
     }
   })
-})
-
-module.exports = router
+}

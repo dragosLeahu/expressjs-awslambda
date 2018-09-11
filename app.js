@@ -1,13 +1,13 @@
 'use strict'
 
-require('dotenv').config({ path: './variables.env' })
+require('dotenv').config({
+  path: './variables.env'
+})
 
 const express = require('express'),
-  app = express(),
-  morgan = require('morgan')
+  app = express()
 
-app.use(morgan('tiny'))
-app.use(express.json())       // to support JSON-encoded bodies
-app.use(require('./controllers'))
+app.use(express.json()) // to support JSON-encoded bodies
+app.use('/api/v1', require('./routes'))
 
 module.exports = app
