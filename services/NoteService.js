@@ -1,87 +1,109 @@
 'use strict'
 
-const connectToDatabase = require('../db'),
-  Note = require('../models/Note')
+const NoteRepository = require('../repositories/NoteRepository')
 
-module.exports.create = (req, callback) => {
-  connectToDatabase()
-    .then(() => {
-      Note.create(req.body)
-        .then(note => callback(null, {
-          statusCode: 200,
-          body: note
-        }))
-        .catch(err => callback(null, {
+module.exports.createNote = (req, callback) => {
+  NoteRepository
+    .create(req, function(err, response) {
+      if (err) {
+        callback({
           statusCode: err.statusCode || 500,
-          headers: { 'Content-Type': 'text/plain' },
+          headers: {
+            'Content-Type': 'text/plain'
+          },
           body: 'Could not create the note.'
-        }))
+        }, null)
+      } else {
+        callback(null, {
+          statusCode: 200,
+          body: response
+        })
+      }
     })
 }
 
-module.exports.getAll = (req, callback) => {
-  connectToDatabase()
-    .then(() => {
-      Note.find()
-        .then(notes => callback(null, {
-          statusCode: 200,
-          body: notes
-        }))
-        .catch(err => callback(null, {
+module.exports.getAllNotes = (callback) => {
+  NoteRepository
+    .getAll(function(err, response) {
+      if (err) {
+        callback({
           statusCode: err.statusCode || 500,
-          headers: { 'Content-Type': 'text/plain' },
+          headers: {
+            'Content-Type': 'text/plain'
+          },
           body: 'Could not fetch the notes.'
-        }))
+        }, null)
+      } else {
+        callback(null, {
+          statusCode: 200,
+          body: response
+        })
+      }
     })
 }
 
-module.exports.getOne = (req, callback) => {
-  connectToDatabase()
-    .then(() => {
-      Note.findById(req.params.id)
-        .then(note => callback(null, {
-          statusCode: 200,
-          body: note
-        }))
-        .catch(err => callback(null, {
+module.exports.getNoteById = (req, callback) => {
+  NoteRepository
+    .getOne(req, function(err, response) {
+      if (err) {
+        callback({
           statusCode: err.statusCode || 500,
-          headers: { 'Content-Type': 'text/plain' },
+          headers: {
+            'Content-Type': 'text/plain'
+          },
           body: 'Could not fetch the note.'
-        }))
+        }, null)
+      } else {
+        callback(null, {
+          statusCode: 200,
+          body: response
+        })
+      }
     })
 }
 
-module.exports.update = (req, callback) => {
-  connectToDatabase()
-    .then(() => {
-      Note.findByIdAndUpdate(req.params.id, req.body, { new: true })
-        .then(note => callback(null, {
-          statusCode: 200,
-          body: note
-        }))
-        .catch(err => callback(null, {
+module.exports.updateNoteById = (req, callback) => {
+  NoteRepository
+    .update(req, function(err, response) {
+      if (err) {
+        callback({
           statusCode: err.statusCode || 500,
-          headers: { 'Content-Type': 'text/plain' },
-          body: 'Could not fetch the notes.'
-        }))
-    })
-}
-
-module.exports.delete = (req, callback) => {
-  connectToDatabase()
-    .then(() => {
-      Note.findByIdAndRemove(req.params.id)
-        .then(note => callback(null, {
+          headers: {
+            'Content-Type': 'text/plain'
+          },
+          body: 'Could not fetch the note.'
+        }, null)
+      } else {
+        callback(null, {
           statusCode: 200,
-          body: { 
-            message: 'Removed note with id: ' + note._id, 
-            note: note 
+          body: {
+            message: 'Updated note with id: ' + response.value._id,
+            note: response.value
           }
-        }))
-        .catch(err => callback(null, {
+        })
+      }
+    })
+}
+
+module.exports.deleteNoteById = (req, callback) => {
+  NoteRepository
+    .delete(req, function(err, response) {
+      if (err) {
+        callback({
           statusCode: err.statusCode || 500,
-          headers: { 'Content-Type': 'text/plain' },
-          body: 'Could not fetch the notes.'
-        }))
+          headers: {
+            'Content-Type': 'text/plain'
+          },
+          body: 'Could not fetch the note.'
+        }, null)
+      } else {
+        callback(null, {
+          statusCode: 200,
+          body: {
+            message: 'Removed note with id: ' + response.value._id,
+            note: response.value
+          }
+        })
+      }
     })
 }

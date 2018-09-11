@@ -3,7 +3,7 @@ const  express = require('express'),
   NoteService = require('../services/NoteService')
 
 router.post('/', function(req, res) {
-  NoteService.create(req, function(err, data) {
+  NoteService.createNote(req, function(err, data) {
     if(err) {
       res.send(err)
     } else {
@@ -13,7 +13,7 @@ router.post('/', function(req, res) {
 })
 
 router.get('/', function(req, res) {
-  NoteService.getAll(null, function(err, data) {
+  NoteService.getAllNotes(function(err, data) {
     if(err) {
       res.send(err)
     } else {
@@ -23,7 +23,7 @@ router.get('/', function(req, res) {
 })
 
 router.get('/:id', function(req, res) {
-  NoteService.getOne(req, function(err, data) {
+  NoteService.getNoteById(req, function(err, data) {
     if(err) {
       res.send(err)
     } else {
@@ -33,7 +33,7 @@ router.get('/:id', function(req, res) {
 })
 
 router.put('/:id', function(req, res) {
-  NoteService.update(req, function(err, data) {
+  NoteService.updateNoteById(req, function(err, data) {
     if(err) {
       res.send(err)
     } else {
@@ -43,7 +43,7 @@ router.put('/:id', function(req, res) {
 })
 
 router.delete('/:id', function(req, res) {
-  NoteService.delete(req, function(err, data) {
+  NoteService.deleteNoteById(req, function(err, data) {
     if(err) {
       res.send(err)
     } else {
