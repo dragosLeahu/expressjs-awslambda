@@ -1,68 +1,68 @@
 const {
-  MongoClient,
-} = require('mongodb');
-const config = require('./config/database');
+  MongoClient
+} = require('mongodb')
+const config = require('./config/database')
 const {
   dbName,
   dbUrl
-} = config.mongo;
+} = config.mongo
 const option = {
   numberOfRetries: 5,
   auto_reconnect: true,
   poolSize: 10,
   connectTimeoutMS: 30000,
   useNewUrlParser: true
-};
+}
 
-let pooledDB;
+let pooledDB
 
-function MongoPool() {}
+function MongoPool () {}
 
-function initPool(callback) {
+function initPool (callback) {
   MongoClient.connect(dbUrl, option, (err, client) => {
     if (err) {
-      console.log(`=> Could not connect to db ${dbName}`);
-      if (callback && typeof(callback) == 'function') {
+      console.log(`=> Could not connect to db ${dbName}`)
+      if (callback && typeof (callback) === 'function') {
         callback(null)
       }
     } else {
-      console.log(`=> Succesfully connected to db ${dbName}`);
+      console.log(`=> Succesfully connected to db ${dbName}`)
 
-      pooledDB = client.db(dbName);
+      pooledDB = client.db(dbName)
 
-      if (callback && typeof(callback) == 'function') {
-        callback(pooledDB);
+      if (callback && typeof (callback) === 'function') {
+        callback(pooledDB)
       }
     }
-  });
-  return MongoPool;
+  })
+  return MongoPool
 }
 
-MongoPool.initPool = initPool;
+MongoPool.initPool = initPool
 
-function getInstance(callback) {
+function getInstance (callback) {
   if (!pooledDB) {
-    initPool(callback);
+    initPool(callback)
   } else {
-    if (callback && typeof(callback) == 'function') {
-      callback(pooledDB);
+    if (callback && typeof (callback) === 'function') {
+      callback(pooledDB)
     }
   }
 }
 
-MongoPool.getInstance = getInstance;
+MongoPool.getInstance = getInstance
 
-function getCollection(name, callback) {
-  this.getInstance(function(db) {
+function getCollection (name, callback) {
+  this.getInstance(function (db) {
     if (!db) {
-      callback(null);
+      callback(null)
     } else {
-      let collection = db.collection(name);
-      callback(collection);
+      let collection = db.collection(name)
+      callback(collection)
     }
-  });
+  })
 }
 
-MongoPool.getCollection = getCollection;
+MongoPool.getCollection = getCollection
 
-module.exports = MongoPool;
+module.exports = MongoPool

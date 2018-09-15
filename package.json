@@ -8,7 +8,7 @@
     "deploy": "claudia create --handler lambda.handler --deploy-proxy-api --version dev --region eu-central-1",
     "update": "claudia update",
     "release": "claudia set-version --version production",
-    "lint": "eslint --fix-dry-run **/*.js",
+    "lint": "eslint --fix **/*.js",
     "start": "ntl"
   },
   "keywords": [],
@@ -16,7 +16,7 @@
   "license": "ISC",
   "devDependencies": {
     "claudia": "^5.1.1",
-    "eslint": "^5.5.0",
+    "eslint": "^5.6.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.14.0",
     "nodemon": "^1.18.4",
@@ -26,7 +26,9 @@
     "aws-serverless-express": "^3.3.5",
     "dotenv": "^6.0.0",
     "express": "^4.16.3",
-    "mongodb": "^3.1.4",
+    "express-joi-validation": "^0.2.1",
+    "joi": "^13.6.0",
+    "mongodb": "^3.1.6",
     "morgan": "^1.9.1",
     "standard": "^12.0.1"
   },
@@ -42,6 +44,10 @@
       ],
       "no-console": [
         "off"
+      ],
+      "semi": [
+        "error",
+        "never"
       ]
     }
   }

@@ -1,4 +1,4 @@
-const NotesRepository = require('../repositories/notes');
+const NotesRepository = require('../repositories/notes')
 
 let responseError = (statusCode, headers, body) => {
   return {
@@ -21,12 +21,12 @@ module.exports.createNote = (req, callback) => {
       if (err) {
         callback(responseError(err.statusCode || 500, {
           'Content-Type': 'text/plain'
-        }, 'Could not create the note.'), null);
+        }, 'Could not create the note.'), null)
       } else {
-        callback(null, responseSuccess(200, response));
+        callback(null, responseSuccess(200, response))
       }
-    });
-};
+    })
+}
 
 module.exports.getAllNotes = (callback) => {
   NotesRepository
@@ -34,12 +34,12 @@ module.exports.getAllNotes = (callback) => {
       if (err) {
         callback(responseError(err.statusCode || 500, {
           'Content-Type': 'text/plain'
-        }, 'Could not fetch the note.'), null);
+        }, 'Could not fetch the note.'), null)
       } else {
-        callback(null, responseSuccess(200, response));
+        callback(null, responseSuccess(200, response))
       }
-    });
-};
+    })
+}
 
 module.exports.getNoteById = (req, callback) => {
   NotesRepository
@@ -47,12 +47,12 @@ module.exports.getNoteById = (req, callback) => {
       if (err) {
         callback(responseError(err.statusCode || 500, {
           'Content-Type': 'text/plain'
-        }, 'Could not fetch the note.'), null);
+        }, 'Could not fetch the note.'), null)
       } else {
-        callback(null, responseSuccess(200, response));
+        callback(null, responseSuccess(200, response))
       }
-    });
-};
+    })
+}
 
 module.exports.updateNoteById = (req, callback) => {
   NotesRepository
@@ -60,12 +60,12 @@ module.exports.updateNoteById = (req, callback) => {
       if (err) {
         callback(responseError(err.statusCode || 500, {
           'Content-Type': 'text/plain'
-        }, 'Could not fetch the note.'), null);
+        }, 'Could not fetch the note.'), null)
       } else {
-        callback(null, responseSuccess(200, response.value));
+        callback(null, responseSuccess(200, response.value))
       }
-    });
-};
+    })
+}
 
 module.exports.deleteNoteById = (req, callback) => {
   NotesRepository
@@ -73,9 +73,9 @@ module.exports.deleteNoteById = (req, callback) => {
       if (err) {
         callback(responseError(err.statusCode || 500, {
           'Content-Type': 'text/plain'
-        }, 'Could not fetch the note.'), null);
+        }, 'Could not fetch the note.'), null)
       } else {
-        callback(null, responseSuccess(200, response.value));
+        callback(null, responseSuccess(200, response.value))
       }
-    });
-};
+    })
+}
