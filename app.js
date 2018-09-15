@@ -1,13 +1,15 @@
-'use strict'
+require('dotenv').config({
+  path: './.env',
+});
+require('./db').initPool(); //connect to db
 
-require('dotenv').config({ path: './variables.env' })
+const express = require('express');
+const app = express();
 
-const express = require('express'),
-  app = express(),
-  morgan = require('morgan')
+app.use(express.json());
+app.use(express.urlencoded({
+  extended: false,
+}));
+app.use('/api/v1', require('./routes'));
 
-app.use(morgan('tiny'))
-app.use(express.json())       // to support JSON-encoded bodies
-app.use(require('./controllers'))
-
-module.exports = app
+module.exports = app;

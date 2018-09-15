@@ -1,19 +1,68 @@
-const mongoose = require('mongoose')
-mongoose.Promise = global.Promise
-let isConnected
+const {
+  MongoClient,
+} = require('mongodb');
+const config = require('./config/database');
+const {
+  dbName,
+  dbUrl
+} = config.mongo;
+const option = {
+  numberOfRetries: 5,
+  auto_reconnect: true,
+  poolSize: 10,
+  connectTimeoutMS: 30000,
+  useNewUrlParser: true
+};
 
-module.exports = connectToDatabase = () => {
-  if(isConnected) {
-    console.log('=> using existing database connection')
-    return Promise.resolve()
-  }
+let pooledDB;
 
-  console.log('=> using new database connection')
-  return mongoose.connect(process.env.DB, { useNewUrlParser: true })
-    .then(db => {
-      isConnected = db.connections[0].readyState
-    })
-    .catch(function(reason) {
-      console.log('Unable to connect to the mongodb instance. Error: ', reason)
-    })
+function MongoPool() {}
+
+function initPool(callback) {
+  MongoClient.connect(dbUrl, option, (err, client) => {
+    if (err) {
+      console.log(`=> Could not connect to db ${dbName}`);
+      if (callback && typeof(callback) == 'function') {
+        callback(null)
+      }
+    } else {
+      console.log(`=> Succesfully connected to db ${dbName}`);
+
+      pooledDB = client.db(dbName);
+
+      if (callback && typeof(callback) == 'function') {
+        callback(pooledDB);
+      }
+    }
+  });
+  return MongoPool;
 }
+
+MongoPool.initPool = initPool;
+
+function getInstance(callback) {
+  if (!pooledDB) {
+    initPool(callback);
+  } else {
+    if (callback && typeof(callback) == 'function') {
+      callback(pooledDB);
+    }
+  }
+}
+
+MongoPool.getInstance = getInstance;
+
+function getCollection(name, callback) {
+  this.getInstance(function(db) {
+    if (!db) {
+      callback(null);
+    } else {
+      let collection = db.collection(name);
+      callback(collection);
+    }
+  });
+}
+
+MongoPool.getCollection = getCollection;
+
+module.exports = MongoPool;
