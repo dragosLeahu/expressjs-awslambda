@@ -1,25 +1,68 @@
-const MongoClient = require('mongodb').MongoClient
+const {
+  MongoClient,
+} = require('mongodb');
+const config = require('./config/database');
+const {
+  dbName,
+  dbUrl
+} = config.mongo;
+const option = {
+  numberOfRetries: 5,
+  auto_reconnect: true,
+  poolSize: 10,
+  connectTimeoutMS: 30000,
+  useNewUrlParser: true
+};
 
-//Connection URL
-const url = process.env.DB
+let pooledDB;
 
-//Database name
-const dbName = process.env.DB_NAME
+function MongoPool() {}
 
-module.exports = (callback) => {
-  MongoClient.connect(url, {
-    useNewUrlParser: true
-  }, function(err, client) {
+function initPool(callback) {
+  MongoClient.connect(dbUrl, option, (err, client) => {
     if (err) {
-      callback(err, null);
+      console.log(`=> Could not connect to db ${dbName}`);
+      if (callback && typeof(callback) == 'function') {
+        callback(null)
+      }
     } else {
-      const db = client.db(dbName)
-      console.log('=> Succesfully connected to db ' + dbName)
+      console.log(`=> Succesfully connected to db ${dbName}`);
 
-      callback(null, db)
+      pooledDB = client.db(dbName);
 
-      client.close()
-      console.log('=> Connection to the db server closed')
+      if (callback && typeof(callback) == 'function') {
+        callback(pooledDB);
+      }
     }
-  })
+  });
+  return MongoPool;
 }
+
+MongoPool.initPool = initPool;
+
+function getInstance(callback) {
+  if (!pooledDB) {
+    initPool(callback);
+  } else {
+    if (callback && typeof(callback) == 'function') {
+      callback(pooledDB);
+    }
+  }
+}
+
+MongoPool.getInstance = getInstance;
+
+function getCollection(name, callback) {
+  this.getInstance(function(db) {
+    if (!db) {
+      callback(null);
+    } else {
+      let collection = db.collection(name);
+      callback(collection);
+    }
+  });
+}
+
+MongoPool.getCollection = getCollection;
+
+module.exports = MongoPool;
