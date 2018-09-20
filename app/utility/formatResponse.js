@@ -1,4 +1,4 @@
-module.exports.formatResponse = (statusCode, data, message) => {
+module.exports = (statusCode, data, message) => {
   return {
     statusCode: statusCode,
     message: message,
