@@ -7,8 +7,10 @@
 - NPM
 
 ## Installation and setup
-**1.** Create a *variables.env* file where you will add the connection string for MongoDB [here's how you can get the connection string](https://hackernoon.com/building-a-serverless-rest-api-with-node-js-and-mongodb-2e0ed0638f47#0027).
-  - The connection string should look like this in the *variables.env*: **DB=mongodb://`USERNAME`:`PASSWORD`@express-awslambda-shard-00-00-9pqtu.mongodb.net:27017,express-awslambda-shard-00-01-9pqtu.mongodb.net:27017,express-awslambda-shard-00-02-9pqtu.mongodb.net:27017/test?ssl=true&replicaSet=express-awslambda-shard-0&authSource=admin&retryWrites=true**
+**1.** Rename the *.env.example* file to *.env* and add your db connection string and your database name. Below you can see examples of connection strings for mongodb:
+  - **mongodb atlas:** mongodb://`USERNAME`:`PASSWORD`@express-awslambda-shard-00-00-9pqtu.mongodb.net:27017,express-awslambda-shard-00-01-9pqtu.mongodb.net:27017,express-awslambda-shard-00-02-9pqtu.mongodb.net:27017/test?ssl=true&replicaSet=express-awslambda-shard-0&authSource=admin&retryWrites=true
+  - **localhost:**
+  mongodb://localhost:27017/
 
 **2.** Run `npm install` to install all the required dependencies.
 
@@ -25,4 +27,4 @@
 5. `start` -> used to be able to run `npm start` and show this menu in the cmd.
 
 ### Notes
-1. **The *.npmignore* file needs to remain inside the project even if it is an empty file, because it overrides the *.gitignore* file at deployment time**. By default ClaudiaJS ignores files from *.gitignore* when packaging the zip for deployment. This leads to the file *variables.env* not being deployed, because it is listed in the *.gitignore* file. If we have the *.npmignore* file in the root of the project, then at deployment it will override the *.gitignore* file and let the *variables.env* file to be deployed. 
+1. **The *.npmignore* file needs to remain inside the project even if it is an empty file, because it overrides the *.gitignore* file at deployment time**. By default ClaudiaJS ignores files from *.gitignore* when packaging the zip for deployment. This leads to the file *variables.env* not being deployed, because it is listed in the *.gitignore* file. If we have the *.npmignore* file in the root of the project, then at deployment it will override the *.gitignore* file and let the *variables.env* file to be deployed.
