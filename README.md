@@ -8,9 +8,9 @@
 
 ## Installation and setup
 **1.** Rename the *.env.example* file to *.env* and add your db connection string and your database name. Below you can see examples of connection strings for mongodb:
-  - mongodb atlas: **mongodb://`USERNAME`:`PASSWORD`@express-awslambda-shard-00-00-9pqtu.mongodb.net:27017,express-awslambda-shard-00-01-9pqtu.mongodb.net:27017,express-awslambda-shard-00-02-9pqtu.mongodb.net:27017/test?ssl=true&replicaSet=express-awslambda-shard-0&authSource=admin&retryWrites=true**
-  - localhost:
-  **mongodb://localhost:27017/**
+  - **mongodb atlas:** mongodb://`USERNAME`:`PASSWORD`@express-awslambda-shard-00-00-9pqtu.mongodb.net:27017,express-awslambda-shard-00-01-9pqtu.mongodb.net:27017,express-awslambda-shard-00-02-9pqtu.mongodb.net:27017/test?ssl=true&replicaSet=express-awslambda-shard-0&authSource=admin&retryWrites=true
+  - **localhost:**
+  mongodb://localhost:27017/
 
 **2.** Run `npm install` to install all the required dependencies.
 
