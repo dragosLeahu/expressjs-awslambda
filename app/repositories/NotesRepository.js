@@ -1,7 +1,7 @@
 const {
   ObjectID
 } = require('mongodb')
-const MongoPool = require('../db')
+const MongoPool = require('../../db')
 
 module.exports.create = (req, callback) => {
   MongoPool.getCollection('notes', function (collection) {
@@ -9,7 +9,7 @@ module.exports.create = (req, callback) => {
       if (error) {
         callback(error, null)
       } else {
-        callback(null, response)
+        callback(null, response.ops[0]) // return.ops[0] - return the object that was inserted
       }
     })
   })
@@ -35,7 +35,7 @@ module.exports.getOne = (req, callback) => {
       if (error) {
         callback(error, null)
       } else {
-        callback(null, response)
+        callback(null, response[0])
       }
     })
   })
@@ -54,7 +54,7 @@ module.exports.update = (req, callback) => {
       if (error) {
         callback(error, null)
       } else {
-        callback(null, response)
+        callback(null, response.value)
       }
     })
   })
@@ -68,7 +68,7 @@ module.exports.delete = (req, callback) => {
       if (error) {
         callback(error, null)
       } else {
-        callback(null, response)
+        callback(null, response.value)
       }
     })
   })
