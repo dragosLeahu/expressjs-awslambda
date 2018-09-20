@@ -18,7 +18,7 @@
 
 ## Usage
 **Use `npm start` to open a menu with available run methods:**
-1. `local` -> runs a *nodemon* local server for testing on localhost:3000.
+1. `local` -> runs a *nodemon* local server for testing on localhost:3000  + runs linter.
 2. `update` -> deploy changes to AWS Lambda.
 3. `deploy` -> this should be ran only the first time to deploy and create a **development** stage of the project to AWS, after it run `update` to deploy changes.
 4. `release` -> deploy the last **development** stage as **production/live** on AWS.
