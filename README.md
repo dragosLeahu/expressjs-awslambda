@@ -7,9 +7,10 @@
 - NPM
 
 ## Installation and setup
-**1.** Create a *variables.env* file where you will add the connection string and name of the database for MongoDB [here's how you can get the connection string](https://hackernoon.com/building-a-serverless-rest-api-with-node-js-and-mongodb-2e0ed0638f47#0027).
-  - The connection string should look like this in the *variables.env*: **DB_URL=mongodb://`USERNAME`:`PASSWORD`@express-awslambda-shard-00-00-9pqtu.mongodb.net:27017,express-awslambda-shard-00-01-9pqtu.mongodb.net:27017,express-awslambda-shard-00-02-9pqtu.mongodb.net:27017/test?ssl=true&replicaSet=express-awslambda-shard-0&authSource=admin&retryWrites=true
-  DB_NAME=YOUR-DB-NAME**
+**1.** Rename the *.env.example* file to *.env* and add your db connection string and your database name. Below you can see examples of connection strings for mongodb:
+  - mongodb atlas: **mongodb://`USERNAME`:`PASSWORD`@express-awslambda-shard-00-00-9pqtu.mongodb.net:27017,express-awslambda-shard-00-01-9pqtu.mongodb.net:27017,express-awslambda-shard-00-02-9pqtu.mongodb.net:27017/test?ssl=true&replicaSet=express-awslambda-shard-0&authSource=admin&retryWrites=true**
+  - localhost:
+  **mongodb://localhost:27017/**
 
 **2.** Run `npm install` to install all the required dependencies.
 
