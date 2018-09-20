@@ -1,4 +1,4 @@
-const NotesService = require('../services/notes')
+const NotesService = require('../services/NotesService')
 
 module.exports.create = (req, res) => {
   NotesService.createNote(req, (err, data) => {
