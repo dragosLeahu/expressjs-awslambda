@@ -1,14 +1,14 @@
 {
-  "name": "expressjs-awslambda",
+  "name": "ubuntu-expressjs-awslambda",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
   "scripts": {
-    "local": "nodemon ./app.local.js --exec \"npm run lint && node\"",
-    "deploy": "claudia create --handler lambda.handler --deploy-proxy-api --version dev --region eu-central-1",
-    "update": "claudia update",
-    "release": "claudia set-version --version production",
-    "lint": "eslint --fix **/*.js",
+    "local": "export NODE_ENV=local nodemon ./app.local.js --exec \"npm run lint && node\"",
+    "create-app": "NODE_ENV=dev claudia create --handler lambda.handler --deploy-proxy-api --version dev --region eu-central-1",
+    "deploy-dev": "NODE_ENV=dev claudia update --version dev",
+    "deploy-prod": "NODE_ENV=prod claudia update --version prod",
+    "lint": "eslint --fix \"**/*.js\"",
     "start": "ntl"
   },
   "keywords": [],
