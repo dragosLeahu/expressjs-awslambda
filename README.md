@@ -5,10 +5,10 @@
 - [AWS CLI configured with *default* user.](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html) [More info from ClaudiaJS documentation here.](https://claudiajs.com/tutorials/installing.html)
 - Node.js 6 or 8
 - NPM
+- [MongoDB Community Edition for local development](https://docs.mongodb.com/manual/installation/)
 
 ## Installation and setup
 **1.** Rename the *.env.example* file to *.env* and add your db connection string and your database name. Below you can see examples of connection strings for mongodb:
-  - **mongodb atlas:** mongodb://`USERNAME`:`PASSWORD`@express-awslambda-shard-00-00-9pqtu.mongodb.net:27017,express-awslambda-shard-00-01-9pqtu.mongodb.net:27017,express-awslambda-shard-00-02-9pqtu.mongodb.net:27017/test?ssl=true&replicaSet=express-awslambda-shard-0&authSource=admin&retryWrites=true
   - **localhost:**
   mongodb://localhost:27017/
 
@@ -17,6 +17,8 @@
 **3.** In the *package.json* file:
 - *scripts -> deploy*, change *--region* to your selected region from the AWS Lambda.
 - change *name* to your application name.
+
+**4.** run `npm start` and select `deploy` option to deploy your application to AWS Lambda (`deploy` is mandatory the first time you deploy your application)
 
 ## Usage
 **Use `npm start` to open a menu with available run methods:**

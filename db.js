@@ -1,11 +1,11 @@
 const {
   MongoClient
 } = require('mongodb')
-const config = require('./config/database')
+const dbConfig = require('./config/database')
 const {
   dbName,
   dbUrl
-} = config.mongo
+} = dbConfig.mongo
 const option = {
   numberOfRetries: 5,
   auto_reconnect: true,
