@@ -1,7 +1,10 @@
-const morgan = require('morgan')
 const app = require('./app')
-const port = process.env.PORT || 3000
+const logger = require('morgan')
+const d = require('./app/utility/debugger')('app.local.js')
+const config = require('./config/config')
 
-app.use(morgan('dev'))
+const { port } = config.app
 
-app.listen(port, () => console.log(`Server is listening on port ${port}.`))
+app.use(logger('dev'))
+
+app.listen(port, () => d(`Server is listening on port ${port}.`))
