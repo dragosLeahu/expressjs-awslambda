@@ -1,12 +1,11 @@
 const {
   MongoClient
 } = require('mongodb')
-const dbConfig = require('./config/database')
-const {
-  dbName,
-  dbUrl
-} = dbConfig.mongo
-const option = {
+const d = require('./app/utility/debugger')('db')
+const config = require('./config/config')
+
+const { name, url } = config.mongo
+const options = {
   numberOfRetries: 5,
   auto_reconnect: true,
   poolSize: 10,
@@ -16,53 +15,33 @@ const option = {
 
 let pooledDB
 
-function MongoPool () {}
-
-function initPool (callback) {
-  MongoClient.connect(dbUrl, option, (err, client) => {
-    if (err) {
-      console.log(`=> Could not connect to db ${dbName}`)
-      if (callback && typeof (callback) === 'function') {
-        callback(null)
-      }
-    } else {
-      console.log(`=> Succesfully connected to db ${dbName}`)
-
-      pooledDB = client.db(dbName)
-
-      if (callback && typeof (callback) === 'function') {
-        callback(pooledDB)
-      }
-    }
-  })
-  return MongoPool
-}
-
-MongoPool.initPool = initPool
-
-function getInstance (callback) {
-  if (!pooledDB) {
-    initPool(callback)
-  } else {
-    if (callback && typeof (callback) === 'function') {
-      callback(pooledDB)
-    }
+/**
+ *Initialize a new connection to the database and sets the database instance to a global variable used for pooling the connection.
+ *
+ */
+async function initPoolAsync () {
+  const client = new MongoClient(url, options)
+  let result = await client.connect()
+  if (result) {
+    let db = client.db(name)
+    pooledDB = db
+    d(`Connected to db ${name}`)
   }
 }
 
-MongoPool.getInstance = getInstance
-
-function getCollection (name, callback) {
-  this.getInstance(function (db) {
-    if (!db) {
-      callback(null)
-    } else {
-      let collection = db.collection(name)
-      callback(collection)
-    }
-  })
+/**
+ * Initialize a new connection to the database and returns the database instance or just returns the database instance if already connected.
+ *
+ * @returns db
+ */
+async function getInstance () {
+  if (!pooledDB) {
+    await initPoolAsync()
+  }
+  return pooledDB
 }
 
-MongoPool.getCollection = getCollection
-
-module.exports = MongoPool
+module.exports = {
+  initPoolAsync,
+  getInstance
+}

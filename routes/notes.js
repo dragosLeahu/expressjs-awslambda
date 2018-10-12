@@ -1,15 +1,16 @@
 const router = require('express').Router()
-const NotesController = require('../app/controllers/NotesController')
-const NotesRequestValidator = require('../app/validators/NotesRequestValidator')
+const notesController = require('../app/controllers/notes')
+const notesValidator = require('../app/validators/notes')
+const c = require('../app/utility/controllerHandler')
 
-router.post('/', NotesRequestValidator.createRule(), NotesController.create)
+router.post('/', notesValidator.createRule(), c(notesController.create, (req, res, next) => [req.body.title, req.body.description]))
 
-router.get('/', NotesController.getAll)
-
-router.get('/:id', NotesRequestValidator.paramsRule(), NotesController.getOne)
-
-router.put('/:id', NotesRequestValidator.paramsRule(), NotesRequestValidator.updateRule(), NotesController.update)
-
-router.delete('/:id', NotesRequestValidator.paramsRule(), NotesController.delete)
+// router.get('/', notesController.getAll)
+//
+// router.get('/:id', NotesRequestValidator.paramsRule(), notesController.getOne)
+//
+// router.put('/:id', NotesRequestValidator.paramsRule(), NotesRequestValidator.updateRule(), notesController.updateOne)
+//
+// router.delete('/:id', NotesRequestValidator.paramsRule(), notesController.deleteOne)
 
 module.exports = router

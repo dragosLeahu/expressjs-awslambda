@@ -4,11 +4,10 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "local": "nodemon ./app.local.js --exec \"npm run lint && node\"",
+    "local": "cross-env DEBUG=$npm_package_name:* nodemon ./app.local.js",
     "create-app": "claudia create --handler lambda.handler --deploy-proxy-api --version dev --region eu-central-1",
     "deploy-dev": "claudia update --version dev",
     "deploy-prod": "claudia update --version prod",
-    "lint": "eslint --fix \"**/*.js\"",
     "start": "ntl"
   },
   "keywords": [],
@@ -16,39 +15,26 @@
   "license": "ISC",
   "devDependencies": {
     "claudia": "^5.1.2",
+    "cross-env": "^5.2.0",
     "eslint": "^5.6.1",
-    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-config-standard": "^12.0.0",
     "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-node": "^7.0.1",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-standard": "^4.0.0",
     "nodemon": "^1.18.4",
     "ntl": "^3.0.0"
   },
   "dependencies": {
     "aws-serverless-express": "^3.3.5",
-    "dotenv": "^6.0.0",
-    "express": "^4.16.3",
+    "cross-var": "^1.1.0",
+    "debug": "^4.1.0",
+    "dotenv": "^6.1.0",
+    "express": "^4.16.4",
     "express-joi-validation": "^0.2.1",
     "joi": "^13.7.0",
-    "mongodb": "^3.1.6",
+    "mongodb": "^3.1.8",
     "morgan": "^1.9.1",
     "standard": "^12.0.1"
-  },
-  "eslintConfig": {
-    "extends": "standard",
-    "env": {
-      "es6": true,
-      "browser": true
-    },
-    "rules": {
-      "no-underscore-dangle": [
-        "off"
-      ],
-      "no-console": [
-        "off"
-      ],
-      "semi": [
-        "error",
-        "never"
-      ]
-    }
   }
 }

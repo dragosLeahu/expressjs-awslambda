@@ -1,19 +1,13 @@
+const notesRepository = require('../repositories/notes')
 const formatResponse = require('../utility/formatResponse')
-const NotesRepository = require('../repositories/NotesRepository')
 
-module.exports.createNote = (req, callback) => {
-  NotesRepository
-    .create(req, (err, note) => {
-      if (err) {
-        callback(formatResponse(err.statusCode || 500, null, 'Could not create the note.'), null)
-      } else {
-        callback(null, formatResponse(200, note, 'Succesfully created note.'))
-      }
-    })
+async function createNote (title, description) {
+  let inserted = await notesRepository.create(title, description)
+  return inserted
 }
 
-module.exports.getAllNotes = (callback) => {
-  NotesRepository
+async function getAllNotes (callback) {
+  await notesRepository
     .getAll((err, notes) => {
       if (err) {
         callback(formatResponse(err.statusCode || 500, null, 'Could not fetch notes.'), null)
@@ -23,8 +17,8 @@ module.exports.getAllNotes = (callback) => {
     })
 }
 
-module.exports.getNoteById = (req, callback) => {
-  NotesRepository
+async function getNoteById (req, callback) {
+  await notesRepository
     .getOne(req, (err, note) => {
       if (err) {
         callback(formatResponse(err.statusCode || 500, null, 'Could not fetch the note.'), null)
@@ -34,9 +28,9 @@ module.exports.getNoteById = (req, callback) => {
     })
 }
 
-module.exports.updateNoteById = (req, callback) => {
-  NotesRepository
-    .update(req, (err, note) => {
+async function updateNoteById (req, callback) {
+  await notesRepository
+    .updateOne(req, (err, note) => {
       if (err) {
         callback(formatResponse(err.statusCode || 500, null, 'Could not fetch the note.'), null)
       } else {
@@ -45,9 +39,9 @@ module.exports.updateNoteById = (req, callback) => {
     })
 }
 
-module.exports.deleteNoteById = (req, callback) => {
-  NotesRepository
-    .delete(req, (err, note) => {
+function deleteNoteById (req, callback) {
+  notesRepository
+    .deleteOne(req, (err, note) => {
       if (err) {
         callback(formatResponse(err.statusCode || 500, null, 'Could not fetch the note.'), null)
       } else {
@@ -55,3 +49,5 @@ module.exports.deleteNoteById = (req, callback) => {
       }
     })
 }
+
+module.exports = { createNote, getAllNotes, getNoteById, deleteNoteById, updateNoteById }
