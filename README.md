@@ -1,32 +1,42 @@
 # Serverless-ExpressJs-MongoDB REST API Boilerplate
 
-## Prerequisites
+### Prerequisites
 - AWS account with access to IAM and Lambda (AWSLambdaFullAccess, IAMFullAccess, AmazonAPIGatewayAdministrator)
-- [AWS CLI configured with *default* user.](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html) [More info from ClaudiaJS documentation here.](https://claudiajs.com/tutorials/installing.html)
-- Node.js 6 or 8
-- NPM
+- AWS CLI configured
+    1. Download and install aws cli from https://aws.amazon.com/cli/
+    2. Here is how to install aws cli on linux easier (might work almost the same on mac): https://gist.github.com/anamorph/aaf8434d3bbad92059b3
+    3. Use `aws configre` and add the ID and Secret from AWS IAM Console, region (default eu-central-1) and set output to json.
+- Node.js 8
 - [MongoDB Community Edition for local development](https://docs.mongodb.com/manual/installation/)
 
-## Installation and setup
-**1.** Rename the *.env.example* file to *.env* and add your db connection string and your database name. Below you can see examples of connection strings for mongodb:
-  - **localhost:**
-  mongodb://localhost:27017/
-
-**2.** Run `npm install` to install all the required dependencies.
-
-**3.** In the *package.json* file:
-- *scripts -> deploy*, change *--region* to your selected region from the AWS Lambda.
+### Installation and setup
+**1.** In the *package.json* file:
 - change *name* to your application name.
 
-**4.** run `npm start` and select `deploy` option to deploy your application to AWS Lambda (`deploy` is mandatory the first time you deploy your application)
+## Setting and running in local environtment for the first time:
+**1.** Copy .env.example as .env and add your variables. Note that .env file is not required for production beacuse the environtmanet variables will be set through AWS console.
 
-## Usage
+**3.** Run `npm install` to install all the required dependencies.
+
+**4.** Run `mongod` in your terminal to start the local database server.
+
+**5.** Run `npm start` and choose `local` to start node server.
+
+## Setting and deploying to AWS for the first time:
+**1.** In the *package.json* file:
+- at *scripts -> deploy*, change *--region* to match your selected region from the AWS Lambda.
+
+**4.** Run `npm start` and select `create-app` to deploy your application to AWS Lambda for the first time.
+
+**5.** Use `npm start` and `deploy-dev` or `deploy-prod` to updated the changes.
+
+### Usage
 **Use `npm start` to open a menu with available run methods:**
-1. `local` -> runs a *nodemon* local server for testing on localhost:3000  + runs linter.
-2. `update` -> deploy changes to AWS Lambda.
-3. `deploy` -> this should be ran only the first time to deploy and create a **development** stage of the project to AWS, after it run `update` to deploy changes.
-4. `release` -> deploy the last **development** stage as **production/live** on AWS.
-5. `start` -> used to be able to run `npm start` and show this menu in the cmd.
+1. `local` -> runs a nodemon local server on localhost:3000.
+2. `create-app` -> this should be ran only the first time to deploy and create a **development** stage of the project to AWS, after it run `update` to deploy changes.
+3. `deploy-dev` -> deploy changes to AWS Lambda with version dev.
+4. `deploy-prod` -> deploy changes to AWS Lambda with version prod.
+5. `start` -> show npm task list menu, use to be able to choose a command from the ones above.
 
 ### Notes
-1. **The *.npmignore* file needs to remain inside the project even if it is an empty file, because it overrides the *.gitignore* file at deployment time**. By default ClaudiaJS ignores files from *.gitignore* when packaging the zip for deployment. This leads to the file *variables.env* not being deployed, because it is listed in the *.gitignore* file. If we have the *.npmignore* file in the root of the project, then at deployment it will override the *.gitignore* file and let the *variables.env* file to be deployed.
+1. **In the *.npmignore* file we can specify the files that we don't want to deploy on AWS.
