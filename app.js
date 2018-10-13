@@ -3,10 +3,6 @@ require('dotenv').config()
 
 const express = require('express')
 const errorHandler = require('./app/middlewares/errorHandler')
-const db = require('./db')
-
-// connect to db
-db.initPoolAsync()
 
 const app = express()
 

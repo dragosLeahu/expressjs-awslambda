@@ -3,14 +3,14 @@ const notesController = require('../app/controllers/notes')
 const notesValidator = require('../app/validators/notes')
 const c = require('../app/utility/controllerHandler')
 
-router.post('/', notesValidator.createRule(), c(notesController.create, (req, res, next) => [req.body.title, req.body.description]))
+router.post('/', notesValidator.createRule(), c(notesController.create, (req, res, next) => [req.body]))
 
-// router.get('/', notesController.getAll)
-//
-// router.get('/:id', NotesRequestValidator.paramsRule(), notesController.getOne)
-//
-// router.put('/:id', NotesRequestValidator.paramsRule(), NotesRequestValidator.updateRule(), notesController.updateOne)
-//
-// router.delete('/:id', NotesRequestValidator.paramsRule(), notesController.deleteOne)
+router.get('/', c(notesController.getAll))
+
+router.get('/:id', notesValidator.paramsRule(), c(notesController.getOne, (req, res, next) => [req.params.id]))
+
+router.put('/:id', notesValidator.paramsRule(), notesValidator.updateRule(), c(notesController.updateOne, (req, res, next) => [req.params.id, req.body]))
+
+router.delete('/:id', notesValidator.paramsRule(), c(notesController.deleteOne, (req, res, next) => [req.params.id]))
 
 module.exports = router

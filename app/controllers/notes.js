@@ -5,44 +5,24 @@ async function create (title, description) {
   return inserted
 }
 
-function getAll (req, res) {
-  notesService.getAllNotes((err, data) => {
-    if (err) {
-      res.send(err)
-    } else {
-      res.send(data)
-    }
-  })
+async function getAll () {
+  let notes = await notesService.getAllNotes()
+  return notes
 }
 
-function getOne (req, res) {
-  notesService.getNoteById(req, (err, data) => {
-    if (err) {
-      res.send(err)
-    } else {
-      res.send(data)
-    }
-  })
+async function getOne (id) {
+  let note = await notesService.getNoteById(id)
+  return note
 }
 
-function updateOne (req, res) {
-  notesService.updateNoteById(req, (err, data) => {
-    if (err) {
-      res.send(err)
-    } else {
-      res.send(data)
-    }
-  })
+async function updateOne (id, data) {
+  let updated = await notesService.updateNoteById(id, data)
+  return updated
 }
 
-function deleteOne (req, res) {
-  notesService.deleteNoteById(req, (err, data) => {
-    if (err) {
-      res.send(err)
-    } else {
-      res.send(data)
-    }
-  })
+async function deleteOne (id) {
+  let deleted = await notesService.deleteNoteById(id)
+  return deleted
 }
 
 module.exports = { create, getAll, getOne, updateOne, deleteOne }

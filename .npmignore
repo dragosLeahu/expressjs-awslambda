@@ -2,3 +2,7 @@ claudia.json
 .env.example
 .env
 .vscode
+app.local.js
+tests
+.eslintrc.json
+README.md
