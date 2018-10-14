@@ -35,7 +35,6 @@ async function initPool () {
 /**
  * Initialize a new connection to the database and returns the database instance or just returns the database instance if already connected.
  *
- * @returns MongoDB database instance
  */
 async function getInstance () {
   if (!pooledDB) {
@@ -45,10 +44,9 @@ async function getInstance () {
 }
 
 /**
- *
+ * Gets a collection from the database by name. Return the collection.
  *
  * @param {string} name
- * @returns MongoDB collection
  */
 async function getCollection (name) {
   let db = await getInstance()
