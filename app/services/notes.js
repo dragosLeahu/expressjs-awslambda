@@ -1,29 +1,41 @@
-const repository = require('../repository')
-const constants = require('../utility/constants')
+const service = (deps, repository) => {
+  async function createNote (title, description) {
+    let data = {
+      title,
+      description
+    }
 
-async function createNote (data) {
-  let inserted = await repository.insertOne(constants.dbCollections.NOTES, data)
-  return inserted
+    let inserted = await repository.insertOne(deps.constants.dbCollections.NOTES, data)
+    return inserted
+  }
+
+  async function getAllNotes () {
+    let notes = await repository.findAll(deps.constants.dbCollections.NOTES)
+    return notes
+  }
+
+  async function getNoteById (id) {
+    let note = await repository.findOne(deps.constants.dbCollections.NOTES, id)
+    return note
+  }
+
+  async function updateNoteById (id, data) {
+    let updated = await repository.updateOneAndGet(deps.constants.dbCollections.NOTES, id, data)
+    return updated
+  }
+
+  async function deleteNoteById (id) {
+    let deleted = await repository.deleteOne(deps.constants.dbCollections.NOTES, id)
+    return deleted
+  }
+
+  return {
+    createNote,
+    getAllNotes,
+    getNoteById,
+    updateNoteById,
+    deleteNoteById
+  }
 }
 
-async function getAllNotes () {
-  let notes = await repository.findAll(constants.dbCollections.NOTES)
-  return notes
-}
-
-async function getNoteById (id) {
-  let note = await repository.findOne(constants.dbCollections.NOTES, id)
-  return note
-}
-
-async function updateNoteById (id, data) {
-  let updated = await repository.updateOneAndGet(constants.dbCollections.NOTES, id, data)
-  return updated
-}
-
-async function deleteNoteById (id) {
-  let deleted = await repository.deleteOne(constants.dbCollections.NOTES, id)
-  return deleted
-}
-
-module.exports = { createNote, getAllNotes, getNoteById, updateNoteById, deleteNoteById }
+module.exports = service

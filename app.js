@@ -7,7 +7,11 @@ const shell = require('./shell');
 
 // connect to db
 (async function () {
-  await shell().db.initPool()
+  try {
+    await shell().db.initPool()
+  } catch (error) {
+    throw new Error(error)
+  }
 })()
 
 const app = express()

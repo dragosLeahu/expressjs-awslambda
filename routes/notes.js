@@ -1,9 +1,10 @@
 const router = require('express').Router()
-const notesController = require('../app/controllers/notes')
-const notesValidator = require('../app/validators/notes')
 const c = require('../app/utility/controllerHandler')
+const shell = require('../shell')
+const notesController = shell().controllers.notes
+const notesValidator = shell().validators.notes
 
-router.post('/', notesValidator.createRule(), c(notesController.create, (req, res, next) => [req.body]))
+router.post('/', notesValidator.createRule(), c(notesController.create, (req, res, next) => [req.body.title, req.body.description]))
 
 router.get('/', c(notesController.getAll))
 

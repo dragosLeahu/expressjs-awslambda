@@ -1,45 +1,50 @@
-const Joi = require('joi')
-const expressJoi = require('express-joi-validation')({})
+const validator = (deps) => {
+  /**
+   * Create a middleware instance that will validate the params for an incoming request.
+   *
+   * @returns {middleware} Instance that will validate the params for an incoming request.
+   */
+  function paramsRule () {
+    const paramsSchema = deps.joi.object({
+      id: deps.joi.string().alphanum().required()
+    })
 
-/**
- * Create a middleware instance that will validate the params for an incoming request.
- *
- * @returns {middleware} Instance that will validate the params for an incoming request.
- */
-function paramsRule () {
-  const paramsSchema = Joi.object({
-    id: Joi.string().alphanum().required()
-  })
+    return deps.expressJoi.params(paramsSchema)
+  }
 
-  return expressJoi.params(paramsSchema)
+  /**
+   * Create a middleware instance that will validate the body for an incoming request.
+   *
+   * @returns {middleware} Instance that will validate the body for an incoming request.
+   */
+  function createRule () {
+    const createBodySchema = deps.joi.object({
+      title: deps.joi.string().required().min(1).max(30),
+      description: deps.joi.string().min(1).max(150)
+    })
+
+    return deps.expressJoi.body(createBodySchema)
+  }
+
+  /**
+   * Create a middleware instance that will validate the body for an incoming request.
+   *
+   * @returns {middleware} Instance that will validate the body for an incoming request.
+   */
+  function updateRule () {
+    const updateBodySchema = deps.joi.object({
+      title: deps.joi.string().min(1).max(30),
+      description: deps.joi.string().min(1).max(150)
+    })
+
+    return deps.expressJoi.body(updateBodySchema)
+  }
+
+  return {
+    paramsRule,
+    createRule,
+    updateRule
+  }
 }
 
-/**
- * Create a middleware instance that will validate the body for an incoming request.
- *
- * @returns {middleware} Instance that will validate the body for an incoming request.
- */
-function createRule () {
-  const createBodySchema = Joi.object({
-    title: Joi.string().required().min(1).max(30),
-    description: Joi.string().min(1).max(150)
-  })
-
-  return expressJoi.body(createBodySchema)
-}
-
-/**
- * Create a middleware instance that will validate the body for an incoming request.
- *
- * @returns {middleware} Instance that will validate the body for an incoming request.
- */
-function updateRule () {
-  const updateBodySchema = Joi.object({
-    title: Joi.string().min(1).max(30),
-    description: Joi.string().min(1).max(150)
-  })
-
-  return expressJoi.body(updateBodySchema)
-}
-
-module.exports = { paramsRule, createRule, updateRule }
+module.exports = validator

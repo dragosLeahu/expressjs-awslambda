@@ -14,7 +14,7 @@ const db = (deps) => {
     if (result) {
       let db = client.db(deps.config.db.name)
       pooledDB = db
-      if (process.env.NODE_ENV === 'development') {
+      if (process.env.NODE_ENV === 'local') {
         d(`Connected to db ${deps.config.db.name}`)
       }
     }

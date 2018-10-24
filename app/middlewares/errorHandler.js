@@ -1,8 +1,8 @@
 const d = require('../utility/debugger')('app.js')
 const APIError = require('../utility/APIError')
-const config = require('../../config/config')
+const config = require('../../config/local')
 
-const { env } = config.app
+const env = config.app.env
 
 /**
  * Handles any error thrown from the application and sends a response to the client with the error. Also sends the stack trace of the error and prints it in the console if development env.
@@ -11,7 +11,7 @@ const { env } = config.app
  */
 function errorHandler () {
   return (err, req, res, next) => {
-    if (env === 'development') {
+    if (env === 'local' || 'development') {
       d(err.stack)
     }
 

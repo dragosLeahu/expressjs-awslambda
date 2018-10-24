@@ -1,7 +1,7 @@
 module.exports = {
   app: {
     name: process.env.APP_NAME,
-    env: process.env.NODE_ENV || 'development',
+    env: process.env.NODE_ENV || 'local',
     port: process.env.PORT || 3000
   },
   db: {

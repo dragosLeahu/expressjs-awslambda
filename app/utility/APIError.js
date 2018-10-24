@@ -1,5 +1,5 @@
-const config = require('../../config/config')
-const { env } = config.app
+const config = require('../../config/local')
+const env = config.app.env
 
 /**
  * Custom error object used for sending the error data to the client.
@@ -11,7 +11,7 @@ class APIError {
     this.success = success
     this.status = status
     this.error = error
-    if (stack && env === 'development') {
+    if (stack && (env === 'local' || 'development')) {
       this.stack = stack
     } else {
       this.stack = ''

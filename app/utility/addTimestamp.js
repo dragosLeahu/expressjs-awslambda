@@ -1,7 +1,4 @@
 const constants = require('../utility/constants')
-var Long = require('mongodb').Long
-var currentMillies = new Date().getTime()
-
 /**
  * Returns target concatinated with a timestamp, different field name stored in the database for the timestamp based on an 'action' string. Returns concatenated JSON.
  *
@@ -14,22 +11,22 @@ function addTimestamp (target, dbAction) {
       if (Array.isArray(target)) {
         let newArr = []
         target.forEach(element => {
-          let objWithTime = Object.assign(element, { createdAt: Long.fromNumber(currentMillies) })
+          let objWithTime = Object.assign(element, { createdAt: new Date().toLocaleString() })
           newArr.push(objWithTime)
         })
         return newArr
       }
-      return Object.assign(target, { createdAt: Long.fromNumber(currentMillies) })
+      return Object.assign(target, { createdAt: new Date().toLocaleString() })
     case constants.dbActions.UPDATE:
       if (Array.isArray(target)) {
         let newArr = []
         target.forEach(element => {
-          let objWithTime = Object.assign(element, { createdAt: Long.fromNumber(currentMillies) })
+          let objWithTime = Object.assign(element, { createdAt: new Date().toLocaleString() })
           newArr.push(objWithTime)
         })
         return newArr
       }
-      return Object.assign(target, { updatedAt: Long.fromNumber(currentMillies) })
+      return Object.assign(target, { updatedAt: new Date().toLocaleString() })
   }
 }
 

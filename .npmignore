@@ -6,3 +6,4 @@ app.local.js
 tests
 .eslintrc.json
 README.md
+config/testing.js
