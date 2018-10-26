@@ -55,13 +55,11 @@ const repository = (deps, db) => {
    * @param {string} collectionName
    * @param {number} id
    */
-  async function findOne (collectionName, id) {
-    if (collectionName && id) {
+  async function findOne (collectionName, criteria) {
+    if (collectionName && criteria) {
       let collection = await db.getCollection(collectionName)
-      let note = await collection.findOne({
-        _id: ObjectID(id)
-      })
-      return note
+      let result = await collection.findOne(criteria)
+      return result
     } else {
       throw new Error('Missing params')
     }

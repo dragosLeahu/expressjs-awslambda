@@ -17,6 +17,7 @@ const db = (deps) => {
       if (process.env.NODE_ENV === 'local') {
         d(`Connected to db ${deps.config.db.name}`)
       }
+      return true
     }
   }
 

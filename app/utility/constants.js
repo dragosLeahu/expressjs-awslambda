@@ -4,7 +4,8 @@ const constants = {
     UPDATE: 'update'
   },
   dbCollections: {
-    NOTES: 'notes'
+    NOTES: 'notes',
+    USERS: 'users'
   }
 }
 

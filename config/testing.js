@@ -14,5 +14,8 @@ module.exports = {
       connectTimeoutMS: 30000,
       useNewUrlParser: true
     }
+  },
+  auth: {
+    secret: 'supercrazysecretfortesting'
   }
 }
