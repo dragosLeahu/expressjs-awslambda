@@ -41,10 +41,6 @@ describe('repository', function () {
     sandbox.restore()
   })
 
-  after(async function () {
-    //await db.dropDatabase()
-  })
-
   describe('insertOne', function () {
     it('is called', async function () {
       // inputs: collectionName, data

@@ -3,8 +3,9 @@ const c = require('../app/utility/controllerHandler')
 const shell = require('../shell')
 const notesController = shell().controllers.notes
 const notesValidator = shell().validators.notes
+const authMiddleware = shell().middlewares.auth
 
-router.post('/', notesValidator.createRule(), c(notesController.create, (req, res, next) => [req.body.title, req.body.description]))
+router.post('/', notesValidator.createRule(), authMiddleware.isAuth('admin'), c(notesController.create, (req, res, next) => [req.body.title, req.body.description]))
 
 router.get('/', c(notesController.getAll))
 

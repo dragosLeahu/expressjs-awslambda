@@ -10,6 +10,8 @@ const authController = require('./app/controllers/authController')
 const notesService = require('./app/services/notes')
 const authService = require('./app/services/authService')
 
+const authMiddleware = require('./app/middlewares/authMiddleware')
+
 // dependencies
 let deps = {
   mongodb: require('mongodb'),
@@ -41,12 +43,17 @@ const shell = () => {
     auth: authValidator(deps)
   }
 
+  const middlewares = {
+    auth: authMiddleware(deps)
+  }
+
   return {
     db: database,
     repository: repo,
     services: services,
     controllers: controllers,
-    validators: validators
+    validators: validators,
+    middlewares: middlewares
   }
 }
 

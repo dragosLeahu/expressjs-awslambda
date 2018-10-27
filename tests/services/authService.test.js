@@ -23,7 +23,7 @@ function createStubDeps (sandbox) {
     },
     constants: {
       dbCollections: {
-        USERS: 'users'
+        USERS: sandbox.stub()
       }
     },
     jwt: {
@@ -52,7 +52,11 @@ describe('authService', function () {
     aService = authService(deps, deps.repo)
   })
 
-  describe('register', function () {
+  after(function () {
+
+  })
+
+  describe('registerUser', function () {
     it('is called', async function () {
       //inputs: email, pass, passConfirm
       //output: succesfully registered message + (send verify email)
@@ -141,8 +145,6 @@ describe('authService', function () {
 
       let result = await aService.registerUser(email, password, passwordConfirm)
 
-      console.log(result)
-
       expect(result).to.exist
       expect(result).to.be.a.string
     })
@@ -168,7 +170,7 @@ describe('authService', function () {
 
   })
 
-  describe('login', function () {
+  describe('loginUser', function () {
     it('is called', async function () {
       let email = 'a@gmail.com'
       let password = 'asdf'
@@ -194,6 +196,84 @@ describe('authService', function () {
       await aService.loginUser(email, password)
 
       expect(spy.callCount).to.equal(1)
+    })
+
+    it('is called with right arguments', async function () {
+      let email = 'a@gmail.com'
+      let password = 'asdf'
+      let user = {
+        email: 'a@gmail.com',
+        password: 'asdf',
+        roles: [
+          'niceguy'
+        ]
+      }
+      const payload = {
+        id: 1,
+        email: user.email,
+        roles: user.roles
+      }
+
+      deps.repo.findOne.returns(user)
+      deps.bcrypt.compare.returns(true)
+      deps.jwt.sign.withArgs(payload)
+
+      let spy = sandbox.spy(aService, 'loginUser')
+
+      await aService.loginUser(email, password)
+
+      expect(spy.calledWithExactly(email, password)).to.be.true
+    })
+
+    it('throws error when arguments missing', async function () {
+      let err
+      try {
+        await aService.loginUser()
+      } catch (error) {
+        err = error
+        expect(error).to.exist
+        expect(error.message).to.equal('Missing params')
+      }
+      expect(err).to.not.undefined
+    })
+
+    it('throws wrong email error when user is not found by email', async function () {
+      let email = 'a@gmail.com'
+      let password = 'asdf'
+      let err
+
+      try {
+        await aService.loginUser(email, password)
+      } catch (error) {
+        err = error
+        expect(error).to.exist
+        expect(error.message).to.equal('Wrong email')
+      }
+      expect(err).to.not.undefined
+    })
+
+    it('throws wrong password error when hashes does not match', async function () {
+      let email = 'a@gmail.com'
+      let password = 'asdf'
+      let user = {
+        email: 'a@gmail.com',
+        password: 'asdf',
+        roles: [
+          'niceguy'
+        ]
+      }
+      let err
+
+      deps.repo.findOne.returns(user)
+
+      try {
+        await aService.loginUser(email, password)
+      } catch (error) {
+        err = error
+        expect(error).to.exist
+        expect(error.message).to.equal('Wrong password')
+      }
+      expect(err).to.not.undefined
     })
   })
 })
