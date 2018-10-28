@@ -5,8 +5,8 @@ module.exports = {
     port: process.env.PORT || 3000
   },
   db: {
-    name: process.env.DB_NAME || 'testing',
-    url: process.env.DB_URL,
+    name: process.env.TESTING_DB_NAME,
+    url: process.env.TESTING_DB_URL,
     options: {
       numberOfRetries: 5,
       auto_reconnect: true,
