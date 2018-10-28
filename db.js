@@ -1,62 +1,52 @@
-const {
-  MongoClient
-} = require('mongodb')
 const d = require('./app/utility/debugger')('db')
-const config = require('./config/config')
 
-const { name, url } = config.mongo
-const env = config.app.env
-const options = {
-  numberOfRetries: 5,
-  auto_reconnect: true,
-  poolSize: 10,
-  connectTimeoutMS: 30000,
-  useNewUrlParser: true
-}
+const db = (deps) => {
+  let pooledDB
 
-let pooledDB
-
-/**
- *Initialize a new connection to the database and sets the database instance to a global variable used for pooling the connection.
- *
- */
-async function initPool () {
-  const client = new MongoClient(url, options)
-  let result = await client.connect()
-  if (result) {
-    let db = client.db(name)
-    pooledDB = db
-    if (env === 'development') {
-      d(`Connected to db ${name}`)
+  /**
+   *Initialize a new connection to the database and sets the database instance to a global variable used for pooling the connection.
+   *
+   */
+  async function initPool () {
+    const { MongoClient } = deps.mongodb
+    const client = new MongoClient(deps.config.db.url, deps.config.db.options)
+    let result = await client.connect()
+    if (result) {
+      let db = client.db(deps.config.db.name)
+      pooledDB = db
+      if (process.env.NODE_ENV === 'local') {
+        d(`Connected to db ${deps.config.db.name}`)
+      }
+      return true
     }
   }
-}
 
-/**
- * Initialize a new connection to the database and returns the database instance or just returns the database instance if already connected.
- *
- * @returns MongoDB database instance
- */
-async function getInstance () {
-  if (!pooledDB) {
-    await initPool()
+  /**
+   * Initialize a new connection to the database and returns the database instance or just returns the database instance if already connected.
+   *
+   */
+  async function getInstance () {
+    if (!pooledDB) {
+      await initPool()
+    }
+    return pooledDB
   }
-  return pooledDB
+
+  /**
+   * Gets a collection from the database by name. Return the collection.
+   *
+   * @param {string} name
+   */
+  async function getCollection (name) {
+    let db = await getInstance()
+    let collection = db.collection(name)
+    return collection
+  }
+
+  return {
+    initPool,
+    getCollection
+  }
 }
 
-/**
- *
- *
- * @param {string} name
- * @returns MongoDB collection
- */
-async function getCollection (name) {
-  let db = await getInstance()
-  let collection = db.collection(name)
-  return collection
-}
-
-module.exports = {
-  initPool,
-  getCollection
-}
+module.exports = db

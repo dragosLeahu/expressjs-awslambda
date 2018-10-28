@@ -3,6 +3,16 @@ require('dotenv').config()
 
 const express = require('express')
 const errorHandler = require('./app/middlewares/errorHandler')
+const shell = require('./shell');
+
+// connect to db
+(async function () {
+  try {
+    await shell().db.initPool()
+  } catch (error) {
+    throw new Error(error)
+  }
+})()
 
 const app = express()
 

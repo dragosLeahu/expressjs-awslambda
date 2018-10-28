@@ -1,4 +1,4 @@
-// this way to have a controllerHandler is explained at - https://stackoverflow.com/questions/41875617/building-enterprise-app-with-node-express
+// more about this controllerHandler @ https://stackoverflow.com/questions/41875617/building-enterprise-app-with-node-express
 
 const APIResponse = require('./APIResponse')
 

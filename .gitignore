@@ -2,3 +2,4 @@ node_modules
 claudia.json
 .env
 .vscode
+.eslintrc.json
