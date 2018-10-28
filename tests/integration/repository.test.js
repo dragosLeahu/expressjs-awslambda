@@ -38,6 +38,7 @@ describe('repository', function () {
 
   afterEach(async function () {
     await repo.deleteAll('notes')
+    await repo.deleteAll('xx')
     sandbox.restore()
   })
 
