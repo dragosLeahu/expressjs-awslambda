@@ -620,7 +620,7 @@ describe('repository', function () {
       expect(result).to.exist
       expect(result).to.be.a('Object')
       expect(result.n).to.equal(result.nModified)
-      expect(result).to.have.keys('n', 'nModified', 'ok')
+      expect(result).to.have.any.keys('n', 'nModified', 'ok')
       expect(result.ok).to.equal(1)
     })
 
@@ -640,7 +640,7 @@ describe('repository', function () {
       expect(result).to.exist
       expect(result).to.be.a('Object')
       expect(result.n).to.equal(result.nModified)
-      expect(result).to.have.keys('n', 'nModified', 'ok')
+      expect(result).to.have.any.keys('n', 'nModified', 'ok')
       expect(result.ok).to.equal(1)
     })
   })
