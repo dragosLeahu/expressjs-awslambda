@@ -1,4 +1,4 @@
-const d = require('../utility/debugger')('app.js')
+const d = require('../utility/debugger')('errorHandler.js')
 const APIError = require('../utility/APIError')
 const config = require('../../config/local')
 

@@ -12,6 +12,9 @@ const authService = require('./app/services/authService')
 
 const authMiddleware = require('./app/middlewares/authMiddleware')
 
+const emailSender = require('./app/utility/emailSender')
+const emailTemplates = require('./app/utility/emailTemplates')
+
 // dependencies
 let deps = {
   mongodb: require('mongodb'),
@@ -19,8 +22,12 @@ let deps = {
   joi: require('joi'),
   expressJoi: require('express-joi-validation')({}),
   constants: require('./app/utility/constants'),
-  bcrypt: require('bcrypt'),
-  jwt: require('jsonwebtoken')
+  bcrypt: require('bcryptjs'),
+  jwt: require('jsonwebtoken'),
+  moment: require('moment'),
+  cryptoRandomString: require('crypto-random-string'),
+  debugger: require('./app/utility/debugger'),
+  nodemailer: require('nodemailer')
 }
 
 const shell = () => {
@@ -28,32 +35,38 @@ const shell = () => {
 
   const repo = repository(deps, database)
 
-  const services = {
+  const util = {
+    emailTemplates: emailTemplates(deps),
+    emailSender: emailSender(deps)
+  }
+
+  const srvs = {
     notes: notesService(deps, repo),
-    auth: authService(deps, repo)
+    auth: authService(deps, repo, util.emailSender, util.emailTemplates)
   }
 
-  const controllers = {
-    notes: notesController(deps, services.notes),
-    auth: authController(deps, services.auth)
+  const ctrls = {
+    notes: notesController(deps, srvs.notes),
+    auth: authController(deps, srvs.auth)
   }
 
-  const validators = {
+  const valids = {
     notes: notesValidator(deps),
     auth: authValidator(deps)
   }
 
-  const middlewares = {
+  const mwares = {
     auth: authMiddleware(deps)
   }
 
   return {
     db: database,
     repository: repo,
-    services: services,
-    controllers: controllers,
-    validators: validators,
-    middlewares: middlewares
+    services: srvs,
+    controllers: ctrls,
+    validators: valids,
+    middlewares: mwares,
+    utilities: util
   }
 }
 
