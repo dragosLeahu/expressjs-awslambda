@@ -10,8 +10,10 @@ const authMiddleware = (deps) => {
           } else {
             req.user = decoded
 
-            // check roles
-            checkRoles(permitedRoles, decoded, res, next)
+            if (permitedRoles.length > 0) {
+              // check roles
+              checkRoles(permitedRoles, decoded, res, next)
+            }
           }
         })
       } else {

@@ -124,8 +124,8 @@ const repository = (deps, db) => {
    */
   async function updateOneAndGet (collectionName, id, data, timestamp = true) {
     if (collectionName && id && data) {
+      let collection = await db.getCollection(collectionName)
       if (timestamp) {
-        let collection = await db.getCollection(collectionName)
         let updated = await collection.findOneAndUpdate({
           _id: ObjectID(id)
         }, {
@@ -138,7 +138,6 @@ const repository = (deps, db) => {
         })
         return updated.value
       } else {
-        let collection = await db.getCollection(collectionName)
         let updated = await collection.findOneAndUpdate({
           _id: ObjectID(id)
         }, {

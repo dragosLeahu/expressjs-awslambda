@@ -28,6 +28,18 @@ function createStubDeps (sandbox) {
     },
     jwt: {
       sign: sandbox.stub()
+    },
+    moment: {
+      add: sandbox.stub().returns({
+        toDate: sinon.stub().returns('2018-10-30 08:50:20')
+      })
+    },
+    cryptoRandomString: sandbox.stub().returns('12j3kbjcbij1buiyfb1f2'),
+    emailSender: {
+      sendEmail: sandbox.stub()
+    },
+    emailTemplates: {
+      buildVerifyEmailContent: sandbox.stub()
     }
   }
 }
@@ -40,20 +52,13 @@ describe('authService', function () {
   before(async function () {
     sandbox = sinon.createSandbox()
     deps = createStubDeps(sandbox)
-    aService = authService(deps, deps.repo)
-  })
-
-  beforeEach(async function () {
+    aService = authService(deps, deps.repo, deps.emailSender, deps.emailTemplates)
   })
 
   afterEach(async function () {
     sandbox.restore()
     deps = createStubDeps(sandbox)
-    aService = authService(deps, deps.repo)
-  })
-
-  after(function () {
-
+    aService = authService(deps, deps.repo, deps.emailSender, deps.emailTemplates)
   })
 
   describe('registerUser', function () {
@@ -135,18 +140,21 @@ describe('authService', function () {
       expect(deps.repo.insertOne.callCount).to.equal(1)
     })
 
-    it('returns user data object', async function () {
+    it('returns success', async function () {
       let email = 'a@gmail.com'
       let password = 'asdf'
       let passwordConfirm = 'asdf'
 
       deps.repo.findOne.returns(undefined)
-      deps.repo.insertOne.returns({ email: 'some@email.com', roles: [] })
+      deps.repo.insertOne.returns({ email: 'a@email.com', roles: [] })
+      deps.emailTemplates.buildVerifyEmailContent.returns('<p>html email</p>')
+      deps.emailSender.sendEmail.returns({ accepted: ['a@email.com'] })
 
       let result = await aService.registerUser(email, password, passwordConfirm)
 
       expect(result).to.exist
       expect(result).to.be.a.string
+      expect(result).to.equal('Succesfully registered. Verification link has been send to your email address.')
     })
 
     it('throws error when the email already exists', async function () {
@@ -162,7 +170,7 @@ describe('authService', function () {
       } catch (error) {
         err = error
         expect(error).to.exist
-        expect(error.message).to.equal('Another account registered with this email')
+        expect(error.message).to.equal('Another account registered with the same email')
       }
 
       expect(err).to.not.undefined
@@ -179,7 +187,11 @@ describe('authService', function () {
         password: 'asdf',
         roles: [
           'niceguy'
-        ]
+        ],
+        verification: {
+          verified: true,
+          code: ''
+        }
       }
       const payload = {
         id: 1,
@@ -206,7 +218,11 @@ describe('authService', function () {
         password: 'asdf',
         roles: [
           'niceguy'
-        ]
+        ],
+        verification: {
+          verified: true,
+          code: ''
+        }
       }
       const payload = {
         id: 1,
@@ -237,6 +253,34 @@ describe('authService', function () {
       expect(err).to.not.undefined
     })
 
+    it('throws user not verified', async function () {
+      let email = 'a@gmail.com'
+      let password = 'asdf'
+      let user = {
+        email: 'a@gmail.com',
+        password: 'asdf',
+        roles: [
+          'niceguy'
+        ],
+        verification: {
+          verified: false,
+          code: '8921hdjk12nh2djk'
+        }
+      }
+      let err
+
+      deps.repo.findOne.returns(user)
+
+      try {
+        await aService.loginUser(email, password)
+      } catch (error) {
+        err = error
+        expect(error).to.exist
+        expect(error.message).to.equal('User not verified')
+      }
+      expect(err).to.not.undefined
+    })
+
     it('throws wrong email error when user is not found by email', async function () {
       let email = 'a@gmail.com'
       let password = 'asdf'
@@ -260,7 +304,11 @@ describe('authService', function () {
         password: 'asdf',
         roles: [
           'niceguy'
-        ]
+        ],
+        verification: {
+          verified: true,
+          code: ''
+        }
       }
       let err
 

@@ -14,6 +14,9 @@ const controllerHandler = (promise, params) => async (req, res, next) => {
   const boundParams = params ? params(req, res, next) : []
   try {
     const data = await promise(...boundParams)
+    if (data.isRedirect) {
+      return res.redirect(data.redirectUrl)
+    }
     return res.status(200).json(new APIResponse(true, 200, data))
   } catch (error) {
     // pass the error to the 'next' error handler
