@@ -33,9 +33,11 @@
 ### Usage
 **Use `npm start` to open a menu with available run methods:**
 1. `local` -> runs a nodemon local server on localhost:3000.
-2. `create-app` -> this should be ran only the first time to deploy and create a **development** stage of the project to AWS, after it run `update` to deploy changes.
-3. `deploy-dev` -> deploy changes to AWS Lambda with version dev.
-4. `deploy-prod` -> deploy changes to AWS Lambda with version prod.
+2. `watch` -> runs mocha watch for testing
+3. `create-app` -> this should be ran only the first time to deploy and create a **development** stage of the project to AWS, after it run `update` to deploy changes.
+4. `deploy-dev` -> deploy changes to AWS Lambda with version dev.
+5. `deploy-prod` -> deploy changes to AWS Lambda with version prod.
+5. `test` -> runs all the tests once and exits (used by CircleCI)
 5. `start` -> show npm task list menu, use to be able to choose a command from the ones above.
 
 ### Notes

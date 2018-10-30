@@ -22,7 +22,7 @@ const emailSender = (deps) => {
     })
   }
 
-  function sendEmail (toAddress, subject, content) {
+  async function sendEmail (toAddress, subject, content) {
     const mailOptions = {
       from: 'IT Portal <' + emailConfig.auth.user + '>',
       to: toAddress,
@@ -30,7 +30,8 @@ const emailSender = (deps) => {
       html: content
     }
 
-    transporter.sendMail(mailOptions)
+    const sent = await transporter.sendMail(mailOptions)
+    return sent
   }
 
   return {

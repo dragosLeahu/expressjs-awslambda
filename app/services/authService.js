@@ -1,18 +1,18 @@
 const authService = (deps, repository, emailSender, emailTemplates) => {
   const collectionName = deps.constants.dbCollections.USERS
 
-  async function registerUser (userEmail, userPassword, passwordConfirm, userRoles) {
+  async function registerUser (userEmail, userPassword, passwordConfirm, userRoles = []) {
     if (userEmail && userPassword && passwordConfirm) {
       if (userPassword === passwordConfirm) {
         const criteria = {
           email: userEmail
         }
-        const foundUser = await repository.findOne(collectionName, criteria)
+        const userExists = await repository.findOne(collectionName, criteria)
 
-        if (!foundUser) {
+        if (!userExists) {
           const saltRounds = 10
           const hash = await deps.bcrypt.hash(userPassword, saltRounds)
-          const codeExpirationDate = deps.moment().add(1, 'd').toDate()
+          const codeExpirationDate = deps.moment.add(1, 'd').toDate()
           const verificationCode = deps.cryptoRandomString(25)
           const userData = {
             email: userEmail,
@@ -25,12 +25,15 @@ const authService = (deps, repository, emailSender, emailTemplates) => {
             }
           }
 
-          const result = await repository.insertOne(collectionName, userData)
+          const registeredUser = await repository.insertOne(collectionName, userData)
 
-          if (result) {
+          if (registeredUser) {
             const emailContent = emailTemplates.buildVerifyEmailContent(userEmail, verificationCode)
-            emailSender.sendEmail(userEmail, 'ITPortal account verification', emailContent)
-            return 'Succesfully registered. Verification link has been send to your email address.'
+            let sent = await emailSender.sendEmail(userEmail, 'ITPortal account verification', emailContent)
+
+            if (sent.accepted.length > 0) {
+              return 'Succesfully registered. Verification link has been send to your email address.'
+            }
           }
         } else {
           throw new Error('Another account registered with the same email')
@@ -49,27 +52,33 @@ const authService = (deps, repository, emailSender, emailTemplates) => {
         email: userEmail
       }
       const user = await repository.findOne(collectionName, criteria)
-      if (user.verification.verified && user.verification.code === '') {
-        // compare hash & sign token
-        if (user) {
-          const match = await deps.bcrypt.compare(plainPassword, user.password)
+      // compare hash & sign token
+      if (user) {
+        if (user.verification.verified && user.verification.code === '') {
+          const passwordMatch = await deps.bcrypt.compare(plainPassword, user.password)
 
-          if (match) {
+          if (passwordMatch) {
             const payload = {
               id: user._id,
               email: user.email,
               roles: user.roles
             }
 
-            return deps.jwt.sign(payload, deps.config.auth.secret)
+            const options = {
+              expiresIn: '1d'
+            }
+
+            const token = await deps.jwt.sign(payload, deps.config.auth.secret, options)
+
+            return token
           } else {
             throw new Error('Wrong password')
           }
         } else {
-          throw new Error('Wrong email')
+          throw new Error('User not verified')
         }
       } else {
-        throw new Error('User not verified')
+        throw new Error('Wrong email')
       }
     } else {
       throw new Error('Missing params')
@@ -85,7 +94,7 @@ const authService = (deps, repository, emailSender, emailTemplates) => {
       }
       const user = await repository.findOne(collectionName, criteria)
       if (user) {
-        const now = deps.moment().toDate()
+        const now = deps.moment.toDate()
         if (user.verification.codeExpiration > now) {
           const newData = {
             verification: {
@@ -95,11 +104,11 @@ const authService = (deps, repository, emailSender, emailTemplates) => {
           }
           const updatedUser = await repository.updateOneAndGet(collectionName, user._id, newData)
           if (updatedUser.verification.verified) {
-            const resData = {
+            const responseData = {
               isRedirect: true,
               redirectUrl: '/verify.html'
             }
-            return resData
+            return responseData
           } else {
             throw new Error('Could not verify the account')
           }
@@ -109,9 +118,11 @@ const authService = (deps, repository, emailSender, emailTemplates) => {
               code: ''
             }
           }
-          await repository.updateOneAndGet(collectionName, user._id, newData)
+          const removedExpiredToken = await repository.updateOneAndGet(collectionName, user._id, newData)
 
-          throw new Error('Verification code expired')
+          if (removedExpiredToken) {
+            throw new Error('Verification code expired')
+          }
         }
       }
     } else {

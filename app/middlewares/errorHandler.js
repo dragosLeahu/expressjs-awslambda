@@ -13,9 +13,10 @@ function errorHandler () {
   return (err, req, res, next) => {
     if (env === 'local' || 'development') {
       d(err.stack)
+      return res.status(err.status || 500).send(new APIError(false, err.status, err.message, err.stack))
     }
 
-    return res.status(err.status || 500).send(new APIError(false, err.status, err.message, err.stack))
+    return res.status(err.status || 500).send(new APIError(false, err.status, err.message))
   }
 }
 
