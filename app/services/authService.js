@@ -12,7 +12,7 @@ const authService = (deps, repository, emailSender, emailTemplates) => {
         if (!userExists) {
           const saltRounds = 10
           const hash = await deps.bcrypt.hash(userPassword, saltRounds)
-          const codeExpirationDate = deps.moment.add(1, 'd').toDate()
+          const codeExpirationDate = deps.moment().add(1, 'd').toDate()
           const verificationCode = deps.cryptoRandomString(25)
           const userData = {
             email: userEmail,
@@ -29,10 +29,13 @@ const authService = (deps, repository, emailSender, emailTemplates) => {
 
           if (registeredUser) {
             const emailContent = emailTemplates.buildVerifyEmailContent(userEmail, verificationCode)
-            let sent = await emailSender.sendEmail(userEmail, 'ITPortal account verification', emailContent)
+            const subject = 'ITPortal account verification'
+            const sent = await emailSender.sendEmail(userEmail, subject, emailContent)
 
             if (sent.accepted.length > 0) {
               return 'Succesfully registered. Verification link has been send to your email address.'
+            } else {
+              throw new Error('Failed when trying to contact email server')
             }
           }
         } else {
@@ -94,7 +97,7 @@ const authService = (deps, repository, emailSender, emailTemplates) => {
       }
       const user = await repository.findOne(collectionName, criteria)
       if (user) {
-        const now = deps.moment.toDate()
+        const now = deps.moment().toDate()
         if (user.verification.codeExpiration > now) {
           const newData = {
             verification: {
@@ -106,7 +109,7 @@ const authService = (deps, repository, emailSender, emailTemplates) => {
           if (updatedUser.verification.verified) {
             const responseData = {
               isRedirect: true,
-              redirectUrl: '/verify.html'
+              pageUrl: '/verify.html'
             }
             return responseData
           } else {

@@ -1,6 +1,6 @@
 const authController = (deps, authService) => {
-  async function register (email, password, passwordConfirm, headers) {
-    let registered = await authService.registerUser(email, password, passwordConfirm, headers)
+  async function register (email, password, passwordConfirm, roles) {
+    let registered = await authService.registerUser(email, password, passwordConfirm, roles)
     return registered
   }
 
