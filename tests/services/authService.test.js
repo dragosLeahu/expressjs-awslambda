@@ -74,6 +74,7 @@ describe('authService', function () {
       await aService.registerUser(email, password, passwordConfirm)
 
       expect(spy.callCount).to.equal(1)
+      // change
 
     })
 
