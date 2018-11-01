@@ -4,7 +4,8 @@ module.exports = {
     env: process.env.NODE_ENV || 'local',
     port: process.env.PORT || 3000,
     url: process.env.APP_URL,
-    baseUrl: process.env.BASE_URL
+    baseUrl: process.env.BASE_URL,
+    staticServerUrl: process.env.STATIC_SERVER_URL
   },
   db: {
     name: process.env.DB_NAME,

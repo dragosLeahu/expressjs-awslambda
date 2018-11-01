@@ -24,7 +24,7 @@ let deps = {
   constants: require('./app/utility/constants'),
   bcrypt: require('bcryptjs'),
   jwt: require('jsonwebtoken'),
-  moment: require('moment')(),
+  moment: require('moment'),
   cryptoRandomString: require('crypto-random-string'),
   debugger: require('./app/utility/debugger'),
   nodemailer: require('nodemailer')

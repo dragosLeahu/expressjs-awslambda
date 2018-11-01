@@ -7,3 +7,4 @@ tests
 .eslintrc.json
 README.md
 config/testing.js
+public

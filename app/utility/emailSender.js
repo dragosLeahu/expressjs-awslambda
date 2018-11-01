@@ -12,16 +12,6 @@ const emailSender = (deps) => {
 
   const transporter = deps.nodemailer.createTransport(emailConfig)
 
-  function verifyConnectionConfiguration () {
-    transporter.verify(function (error, success) {
-      if (error) {
-        throw new Error(error.message)
-      } else {
-        console.log('Email server is ready to send messages')
-      }
-    })
-  }
-
   async function sendEmail (toAddress, subject, content) {
     const mailOptions = {
       from: 'IT Portal <' + emailConfig.auth.user + '>',
@@ -30,13 +20,12 @@ const emailSender = (deps) => {
       html: content
     }
 
-    const sent = await transporter.sendMail(mailOptions)
-    return sent
+    const info = transporter.sendMail(mailOptions)
+    return info
   }
 
   return {
-    sendEmail,
-    verifyConnectionConfiguration
+    sendEmail
   }
 }
 

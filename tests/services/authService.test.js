@@ -29,11 +29,11 @@ function createStubDeps (sandbox) {
     jwt: {
       sign: sandbox.stub()
     },
-    moment: {
+    moment: sandbox.stub().returns({
       add: sandbox.stub().returns({
         toDate: sinon.stub().returns('2018-10-30 08:50:20')
       })
-    },
+    }),
     cryptoRandomString: sandbox.stub().returns('12j3kbjcbij1buiyfb1f2'),
     emailSender: {
       sendEmail: sandbox.stub()

@@ -1,6 +1,7 @@
 // more about this controllerHandler @ https://stackoverflow.com/questions/41875617/building-enterprise-app-with-node-express
 
-const APIResponse = require('./APIResponse')
+const APIResponse = require('../utility/APIResponse')
+const config = require('../../config/local')
 
 /**
  * Handles controller execution and responds to user.
@@ -14,8 +15,9 @@ const controllerHandler = (promise, params) => async (req, res, next) => {
   const boundParams = params ? params(req, res, next) : []
   try {
     const data = await promise(...boundParams)
-    if (data.isRedirect) {
-      return res.redirect(data.redirectUrl)
+    if (data && data.isRedirect) {
+      const staticBucketUrl = config.app.staticServerUrl
+      return res.redirect(staticBucketUrl + data.pageUrl)
     }
     return res.status(200).json(new APIResponse(true, 200, data))
   } catch (error) {

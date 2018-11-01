@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const c = require('../app/utility/controllerHandler')
+const c = require('../app/middlewares/controllerHandler')
 const shell = require('../shell')
 const authController = shell().controllers.auth
 const authValidator = shell().validators.auth
